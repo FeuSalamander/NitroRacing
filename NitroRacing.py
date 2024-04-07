@@ -5,6 +5,7 @@ import winsound
 timer = -1
 cooldown = 0
 refresh = 0
+speed = 30
 
 started = False
 elements = [
@@ -41,6 +42,7 @@ sounds = [
     "assets/Stal.wav",
     "assets/kerosene.wav"
 ]
+colors = [[0, 255, 25], [0, 162, 16], [201, 207, 83], [201, 126, 85], [255, 95, 95], [180, 67, 67]]
 
 
 def paste_main():
@@ -59,10 +61,12 @@ def start():
 
 
 def end():
+    return
     global started
     global cooldown
     global refresh
     global matrix
+    global speed
     if not started:
         return
     started = False
@@ -72,6 +76,7 @@ def end():
               [2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    speed = 30
     winsound.PlaySound(sounds[0], winsound.SND_ASYNC)
 
 
@@ -81,7 +86,7 @@ def clock():
     background(assets[2])
     if cooldown > 0:
         cooldown -= 1
-    if refresh > 30:
+    if refresh > 1200//speed:
         refresh = 0
         move()
     refresh += 1
@@ -95,6 +100,8 @@ def clock():
             y = line_cords[i]
             image(assets[elements[item]["texture"]], x, y)
 
+    text(str(speed)+"\nkm/h", 77, 863)
+
 
 def move():
     for i in range(4):
@@ -106,6 +113,23 @@ def move():
             matrix[i][j] = matrix[i][j + 1]
         r = random.choice(weight)
         matrix[i][9] = r
+    global speed
+    speed += 1
+
+    if speed < 50:
+        fill(colors[0][0], colors[0][1], colors[0][2])
+    elif speed < 70:
+        fill(colors[1][0], colors[1][1], colors[1][2])
+    elif speed < 90:
+        fill(colors[2][0], colors[2][1], colors[2][2])
+    elif speed < 130:
+        fill(colors[3][0], colors[3][1], colors[3][2])
+    elif speed < 150:
+        fill(colors[4][0], colors[4][1], colors[4][2])
+    elif speed < 180:
+        fill(colors[5][0], colors[5][1], colors[5][2])
+    if speed == 140:
+        winsound.PlaySound(sounds[1], winsound.SND_ASYNC)
 
 
 def load_images():
@@ -125,6 +149,10 @@ def setup():
     background("white")
     title("Nitro Drive")
     load_images()
+    global pixel_font
+    pixel_font = create_font("assets/font.ttf", 50)
+    text_font(pixel_font)
+    fill(colors[0][0], colors[0][1], colors[0][2])
     winsound.PlaySound(sounds[0], winsound.SND_ASYNC)
 
 
@@ -164,7 +192,7 @@ def key_pressed():
             matrix[player_cords][0] = 0
             player_cords += -1
             matrix[player_cords][0] = 2
-            cooldown = 12
+            cooldown = 8
     if key == "DOWN" and cooldown < 1:
         if player_cords < 3:
             if matrix[player_cords+1][0] != 0:
@@ -175,7 +203,7 @@ def key_pressed():
             matrix[player_cords][0] = 0
             player_cords += 1
             matrix[player_cords][0] = 2
-            cooldown = 12
+            cooldown = 8
 
 
 if __name__ == "__main__":
