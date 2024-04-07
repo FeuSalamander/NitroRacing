@@ -6,6 +6,8 @@ timer = -1
 cooldown = 0
 refresh = 0
 speed = 30
+boost = 0
+boost_reload = 0
 
 started = False
 elements = [
@@ -61,17 +63,22 @@ def start():
 
 
 def end():
-    return
+    global boost
+    if boost > 0:
+        return
     global started
     global cooldown
     global refresh
     global matrix
     global speed
+    global boost_reload
     if not started:
         return
     started = False
     cooldown = 0
     refresh = 0
+    boost = 0
+    boost_reload = 0
     matrix = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -96,11 +103,23 @@ def clock():
             item = matrix[i][j]
             if item == 0:
                 continue
-            x = 30 + 150 * j
+            x = 30 + 150 * (j+1)
+            if item == 2:
+                x -= 150
+            if item != 2:
+                x = x - (150/(1200//speed))*refresh
             y = line_cords[i]
-            image(assets[elements[item]["texture"]], x, y)
+            if item == 2:
+                if boost > 0:
+                    image(assets[8], x, y)
+                else:
+                    image(assets[elements[item]["texture"]], x, y)
+            else:
+                image(assets[elements[item]["texture"]], x, y)
 
     text(str(speed)+"\nkm/h", 77, 863)
+    if boost_reload >= 20:
+        image(assets[9], 205, 841)
 
 
 def move():
@@ -115,6 +134,15 @@ def move():
         matrix[i][9] = r
     global speed
     speed += 1
+
+    global boost
+    if boost > 0:
+        boost -= 1
+        if boost == 0:
+            speed -= 200
+    global boost_reload
+    if boost_reload < 20:
+        boost_reload += 1
 
     if speed < 50:
         fill(colors[0][0], colors[0][1], colors[0][2])
@@ -141,7 +169,9 @@ def load_images():
               load_image("assets/count2.jpg"),
               load_image("assets/count3.jpg"),
               load_image("assets/car.png"),
-              load_image("assets/hole.png")]
+              load_image("assets/hole.png"),
+              load_image("assets/mustang_b.png"),
+              load_image("assets/nitro.png")]
 
 
 def setup():
@@ -157,6 +187,7 @@ def setup():
 
 
 def draw():
+    size(1600, 1024)
     if not started:
         paste_main()
         return
@@ -193,6 +224,7 @@ def key_pressed():
             player_cords += -1
             matrix[player_cords][0] = 2
             cooldown = 8
+            return
     if key == "DOWN" and cooldown < 1:
         if player_cords < 3:
             if matrix[player_cords+1][0] != 0:
@@ -204,6 +236,15 @@ def key_pressed():
             player_cords += 1
             matrix[player_cords][0] = 2
             cooldown = 8
+            return
+    if key == " ":
+        global boost_reload
+        if boost_reload >= 20:
+            global boost
+            boost += 7
+            boost_reload = 0
+            global speed
+            speed += 200
 
 
 if __name__ == "__main__":
