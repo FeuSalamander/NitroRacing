@@ -17,7 +17,7 @@ elements = [
         "collision": False
     },
     {
-        "name": "car",
+        "name": "car green",
         "texture": 6,
         "collision": True
     },
@@ -30,10 +30,21 @@ elements = [
         "name": "hole",
         "texture": 7,
         "collision": False
+    },
+    {
+        "name": "car blue",
+        "texture": 10,
+        "collision": True
+    },
+    {
+        "name": "car pink",
+        "texture": 11,
+        "collision": True
     }
 
 ]
-weight = [0, 0, 0, 0, 0, 0, 1, 3]
+weight = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+          1, 3, 4, 5]
 matrix = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           [2, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -132,6 +143,7 @@ def move():
             matrix[i][j] = matrix[i][j + 1]
         r = random.choice(weight)
         matrix[i][9] = r
+
     global speed
     speed += 1
 
@@ -168,10 +180,12 @@ def load_images():
               load_image("assets/count1.jpg"),
               load_image("assets/count2.jpg"),
               load_image("assets/count3.jpg"),
-              load_image("assets/car.png"),
+              load_image("assets/car_green.png"),
               load_image("assets/hole.png"),
               load_image("assets/mustang_b.png"),
-              load_image("assets/nitro.png")]
+              load_image("assets/nitro.png"),
+              load_image("assets/car_blue.png"),
+              load_image("assets/car_pink.png")]
 
 
 def setup():
@@ -242,7 +256,7 @@ def key_pressed():
         if boost_reload >= 20:
             global boost
             boost += 7
-            boost_reload = 0
+            boost_reload = -6
             global speed
             speed += 200
 
