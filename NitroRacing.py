@@ -134,6 +134,7 @@ def clock():
 
 
 def move():
+
     for i in range(4):
         for j in range(9):
             if matrix[i][j] == 2:
@@ -141,8 +142,12 @@ def move():
                     end()
                 continue
             matrix[i][j] = matrix[i][j + 1]
-        r = random.choice(weight)
-        matrix[i][9] = r
+
+    nextSpawn = [random.choice(weight) for i in range(4)]
+    if nextSpawn.count(0) == 0:
+        nextSpawn[random.randint(0, 3)] = 0
+    for k in range(len(nextSpawn)):
+        matrix[k][9] = nextSpawn[k]
 
     global speed
     speed += 1
@@ -191,7 +196,7 @@ def load_images():
 def setup():
     size(1600, 1024)
     background("white")
-    title("Nitro Drive")
+    title("Nitro Racing")
     load_images()
     global pixel_font
     pixel_font = create_font("assets/font.ttf", 50)
@@ -235,7 +240,7 @@ def key_pressed():
                 else:
                     end()
             matrix[player_cords][0] = 0
-            player_cords += -1
+            player_cords -= 1
             matrix[player_cords][0] = 2
             cooldown = 8
             return
