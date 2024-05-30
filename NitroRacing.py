@@ -152,8 +152,8 @@ def clock():
     #affiche la vitesse
     text(str(speed)+"\nkm/h", 65, 653)
     #affiche si le boost est disponible
-
-    image(assets[9], 205, 633)
+    if boost_reload >= 20:
+        image(assets[9], 205, 633)
 
 
 #fais bouger les elements de la scene vers la gauche
