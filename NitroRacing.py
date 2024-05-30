@@ -1,6 +1,7 @@
 from p5 import *
 import random
 import winsound
+import pyautogui
 
 #definie les variables pricinpales
 timer = -1
@@ -61,7 +62,7 @@ matrix = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 player_cords = 1
 
 #stocke les coordonnees de chaque ligne en pixel
-line_cords = [256, 400, 550, 678]
+line_cords = [175, 292, 412, 510]
 
 #la liste des pistes audio
 sounds = [
@@ -76,7 +77,7 @@ colors = [[0, 255, 25], [0, 162, 16], [201, 207, 83], [201, 126, 85], [255, 95, 
 #affiche l ecran d attente
 def paste_main():
     background(assets[0])
-    image(assets[1], 1250, 465)
+    image(assets[1], 1120, 355)
 
 
 def start():
@@ -149,10 +150,10 @@ def clock():
                 image(assets[elements[item]["texture"]], x, y)
 
     #affiche la vitesse
-    text(str(speed)+"\nkm/h", 77, 863)
+    text(str(speed)+"\nkm/h", 65, 653)
     #affiche si le boost est disponible
-    if boost_reload >= 20:
-        image(assets[9], 205, 841)
+
+    image(assets[9], 205, 633)
 
 
 #fais bouger les elements de la scene vers la gauche
@@ -223,10 +224,11 @@ def load_images():
 
 #cree la fenetre et gere l initialisation
 def setup():
-    size(1600, 1024)
+    size(1422, 800)
     background("white")
     title("Nitro Racing")
     load_images()
+    change_size()
     global pixel_font
     pixel_font = create_font("assets/font.ttf", 50)
     text_font(pixel_font)
@@ -234,8 +236,14 @@ def setup():
     winsound.PlaySound(sounds[0], winsound.SND_ASYNC)
 
 
+def change_size():
+    assets[0].size = (width, height)
+    assets[2].size = (width, height)
+    assets[3].size = (width, height)
+    assets[4].size = (width, height)
+    assets[5].size = (width, height)
+
 def draw():
-    size(1600, 1024)
     if not started:
         paste_main()
         return
@@ -254,7 +262,7 @@ def mouse_released():
     if started:
         return
     #regarde si le joueur clique sur le boutton
-    if 138 < mouse_x < 436 and 425 < mouse_y < 600:
+    if 126 < mouse_x < 383 and 329 < mouse_y < 465:
         start()
 
 
